@@ -40,9 +40,15 @@ class PersonApiView(APIView):
             response = {
                 'code': status.HTTP_201_CREATED,
                 'message': 'Person was added successfully',
-                'person': person_serializer
+                'person': person_serializer.data
             }
             return Response(response, status=status.HTTP_201_CREATED)
 
-        return Response("Por favor verificar los datos enviados", status=status.HTTP_400_BAD_REQUEST)
+        response = {
+            'code': status.HTTP_400_BAD_REQUEST,
+            'person': person_serializer.data,
+            'message': "La persona no fue agregada, por favor verificar los datos enviados",
+            'technical_error': person_serializer.errors
+        }
+        return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
